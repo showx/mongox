@@ -15,8 +15,6 @@ use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\WriteConcern;
 use MongoDB\Driver\Exception\BulkWriteException;
 use MongoDB\Driver\Exception\Exception as MongoDBDriverException;
-use MongoDB\Operation\DropDatabase;
-use MongoDB\Operation\ListDatabases;
 
 class CreateCollection {
     protected $cmd = array();

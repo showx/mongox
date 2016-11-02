@@ -1,5 +1,6 @@
 <?php
 namespace mongox;
+include_once dirname(__FILE__).'/mongodb.config.php'; 
 /**
  * mongolog日志类
  * 使用静态方法保存数据
@@ -45,8 +46,9 @@ Class log{
             $arr['log'] = $msg; 
 
             //统一存进
-            $mogo = new \mongox\mongoadapter;
+            $mogo = new \mongox\mongoadapter(MONGOX_HOST,MONGOX_PORT,MONGOX_USER,MONGOX_PASS);
             $select = $mogo->select("show");
+            $siteid = MONGOX_ID;
             $mogo->insert($siteid,$arr);
             
             

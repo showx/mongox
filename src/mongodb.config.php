@@ -13,6 +13,6 @@ define("MONGOX_USER","");
 define("MONGOX_PASS","");
 //默认数据库
 define("MONGOX_DB","db");
-//站点ID
-define("MONGOX_ID","");
+//站点ID 理解为集合
+define("MONGOX_ID","test");
 ?>

@@ -29,19 +29,20 @@ class mongoadapter
 {
     public $drive;
     public $conf;
-    public function __construct()
+    public function __construct($hostserver='127.0.0.1',$port='27017',$user='',$pass='')
     {
+        $host = $hostserver.":".$port;
         //选择合适的驱动
         if(class_exists("Mongo"))
         {
-            $this->drive = new db_mongo();
+            $this->drive = new db_mongo($host,$user,$pass);
         }else{
             if(!class_exists("MongoDB\Driver\Manager"))
             {
                 echo 'no mongodb drive';
                 return '';
             }
-            $this->drive = new db_mongodb();
+            $this->drive = new db_mongodb($host,$user,$pass);
         }    
     }
     /**

@@ -11,12 +11,19 @@ class db_mongo implements mongo_base
     public $cols;
     public $dbname;
     //初始化mongo
-    function init_mongo($host,$username,$password,$dbname)
+    function init_mongo($host,$username,$password,$dbname='')
     {
         try 
         {
+            $authString = "";
+            if ($username && $password) {
+                $authString = "{$username}:{$password}@";
+            }
+            // $replicaSet && $replicaSet = '?replicaSet='.$replicaSet;
+            $dsn = "mongodb://{$authString}{$host}";
+
             //使用经典的Mongo,没使用MongoClient
-            $this->conn = new Mongo($host, array('timeout'=>500, 'connect'=>true) );
+            $this->conn = new Mongo($dsn, array('timeout'=>500, 'connect'=>true) );
             if($dbname)
             {
                 self::select($dbname);
