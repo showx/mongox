@@ -61,9 +61,9 @@ class db_mongodb implements mongo_base
     public $conn;
     public $dbname;
     public $collection;
-    public function  __construct()
+    public function  __construct($host,$username='',$password='',$dbname='')
     {
-        self::init_mongo("127.0.0.1:27017");
+        self::init_mongo($host,$username,$password,$dbname);
     }
     //初始化mongo
     public function init_mongo($host,$username='',$password='',$dbname='')

@@ -10,6 +10,10 @@ class db_mongo implements mongo_base
     public $db;
     public $cols;
     public $dbname;
+    public function  __construct($host,$username,$password,$dbname='')
+    {
+        self::init_mongo($host,$username,$password,$dbname);
+    }
     //初始化mongo
     function init_mongo($host,$username,$password,$dbname='')
     {
@@ -23,7 +27,7 @@ class db_mongo implements mongo_base
             $dsn = "mongodb://{$authString}{$host}";
 
             //使用经典的Mongo,没使用MongoClient
-            $this->conn = new Mongo($dsn, array('timeout'=>500, 'connect'=>true) );
+            $this->conn = new \Mongo($dsn, array('timeout'=>500, 'connect'=>true) );
             if($dbname)
             {
                 self::select($dbname);
@@ -42,30 +46,32 @@ class db_mongo implements mongo_base
     //选择集合
     function selectCollection($collection_name)
     {
-        return self::$db->selectCollection( $collection_name );
+        return $this->db->selectCollection( $collection_name );
     }
     //选择数据库
     function select($dbname)
     {
             $this->db = $this->conn->selectDB($dbname);
+	    return $this->db;
     }
     //获取信息
      public function get_one( $collection_name='', $condition=array(), $fields=array(), $key='' )
     {
-        if( !isset( self::$cols[$collection_name] ) )
-        {
-            self::$cols[$collection_name] = self::select( $collection_name );
-        }
-        $rs = self::$cols[$collection_name]->findOne($condition, $fields);
+
+        $rs = $this->db->selectCollection($collection_name)->findOne($condition, $fields);
         return empty($key) ? $rs :( isset($rs[$key]) ? $rs[$key] : false );
     }
     //插入
     public function insert( $collection_name='', $docarray=array(), $options=array() )
     {
-        if( !isset( self::$cols[$collection_name] ) )
+    	return $this->db->selectCollection($collection_name)->insert( $docarray, $options );
+    
+        /*
+	if( !isset( $this->cols[$collection_name] ) )
         {
-            self::$cols[$collection_name] = self::select( $collection_name );
+            $this->cols[$collection_name] = $this->select( $collection_name );
         }
-        return self::$cols[$collection_name]->insert( $docarray, $options );
+        return $this->cols[$collection_name]->insert( $docarray, $options );
+	*/
     }
 }
