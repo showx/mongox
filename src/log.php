@@ -47,7 +47,7 @@ Class log{
             $arr['logname'] = $log_name;
             $arr['day'] = $day;
             $arr['datetime'] = $time;
-            $arr['log'] = $msg; 
+            $arr['log'] = $msgs; 
             //统一存进
             $mogo->insert($siteid,$arr);
             
