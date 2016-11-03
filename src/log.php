@@ -31,6 +31,10 @@ Class log{
      */
     public static function save()
     {
+        $mogo = new \mongox\mongoadapter(MONGOX_HOST,MONGOX_PORT,MONGOX_USER,MONGOX_PASS);
+        $select = $mogo->select("show");
+        $siteid = MONGOX_ID;
+
         foreach(self::$logs as $log_name => $log_datas )
         {
             $msgs = '';
@@ -44,11 +48,7 @@ Class log{
             $arr['day'] = $day;
             $arr['datetime'] = $time;
             $arr['log'] = $msg; 
-
             //统一存进
-            $mogo = new \mongox\mongoadapter(MONGOX_HOST,MONGOX_PORT,MONGOX_USER,MONGOX_PASS);
-            $select = $mogo->select("show");
-            $siteid = MONGOX_ID;
             $mogo->insert($siteid,$arr);
             
             
