@@ -33,7 +33,7 @@ class mongoadapter
     {
         $host = $hostserver.":".$port;
         //选择合适的驱动
-        if(class_exists("Mongo"))
+        if(extension_loaded("Mongo"))
         {
             $this->drive = new db_mongo($host,$user,$pass);
         }else{
