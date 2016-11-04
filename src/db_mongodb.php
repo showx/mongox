@@ -149,6 +149,7 @@ class db_mongodb implements mongo_base
         } catch (BulkWriteException $e) {
             $result = $e->getWriteResult();
 
+            /*
             if ($writeConcernError = $result->getWriteConcernError()) {
                 printf("%s (%d): %s\n",
                     $writeConcernError->getMessage(),
@@ -165,8 +166,10 @@ class db_mongodb implements mongo_base
                     $writeError->getCode()
                 );
             }
+            */
         } catch (MongoDBDriverException $e) {
-            printf("Other error: %s\n", $e->getMessage());
+            printf("mongo error!");
+            // printf("Other error: %s\n", $e->getMessage());
         }
 
         // $result->getInsertedCount()
