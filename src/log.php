@@ -1,6 +1,10 @@
 <?php
 namespace mongox;
-include_once dirname(__FILE__).'/mongodb.config.php'; 
+//当前框架没有常量配置的时候，才读取默认的
+if(!defined("MONGOX_HOST"))
+{
+    include_once dirname(__FILE__).'/mongodb.config.php'; 
+}
 /**
  * mongolog日志类
  * 使用静态方法保存数据
