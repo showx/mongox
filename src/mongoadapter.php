@@ -37,7 +37,8 @@ class mongoadapter
         {
             $this->drive = new db_mongo($host,$user,$pass,$dbname);
         }else{
-            if(!class_exists("MongoDB\Driver\Manager"))
+            //class_exists("MongoDB\Driver\Manager")
+            if(!extension_loaded("Mongodb"))
             {
                 echo 'no mongodb drive';
                 return '';
