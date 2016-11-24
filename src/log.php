@@ -6,7 +6,7 @@ if(!defined("MONGOX_HOST"))
     include_once dirname(__FILE__).'/mongodb.config.php'; 
 }
 /**
- * mongolog日志类
+ * @desc mongolog日志类
  * 使用静态方法保存数据
  * @Author:show
  */
@@ -26,6 +26,16 @@ Class log{
     public static function add($log_name, $msg)
     {
         self::$logs[ $log_name ][] = $msg;
+    }
+    /**
+     * @desc 简单增加测试函数
+     */
+    public static function test()
+    {
+        $mogo = new \mongox\mongoadapter(MONGOX_HOST,MONGOX_PORT,MONGOX_USER,MONGOX_PASS,MONGOX_DB);
+        $b = $mogo->createCollection("t");
+        // $b = $mogo->selectCollection("t");
+        // $mogo->createCollection("t");
     }
 
     /**
@@ -52,7 +62,12 @@ Class log{
             $arr['day'] = $day;
             $arr['datetime'] = $time;
             $arr['log'] = $msgs; 
+
+            //!!!!!!一个站为一个数据库，内容为集合
+            $siteid = $log_name;
+            
             //统一存进
+            $mogo->CreateCollection($siteid);
             $mogo->insert($siteid,$arr);
             
             
@@ -60,6 +75,5 @@ Class log{
         self::$logs = array();
 
     }
-
 }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * php mongodb扩展操作类
+ * @desc php mongodb扩展操作类
  * @Author:show
  */
 namespace mongox;
@@ -65,7 +65,9 @@ class db_mongodb implements mongo_base
     {
         self::init_mongo($host,$username,$password,$dbname);
     }
-    //初始化mongo
+    /**
+     * 初始化mongo
+     */
     public function init_mongo($host,$username='',$password='',$dbname='')
     {
         $authString = "";
@@ -81,11 +83,22 @@ class db_mongodb implements mongo_base
         }
 
     }
-    //创建集合
-    public function createCollection($collection_name)
+    /**
+     * @desc 创建集合
+     * @param collection_name 集合名称
+     * @param size 大小
+     */
+    public function createCollection($collection_name,$size='')
     {
         $createCollection = new CreateCollection($collection_name);
-        $createCollection->setCappedCollection(1024);
+        if(!empty(MONGOX_SIZE) && empty($size))
+        {
+            $size = MONGOX_SIZE;
+        }
+        if(!empty($size))
+        {
+            $createCollection->setCappedCollection($size);
+        }
         try {
             $command = $createCollection->getCommand();
             //选择数据库，执行命令
@@ -96,20 +109,29 @@ class db_mongodb implements mongo_base
             $cursor = $this->conn->executeCommand($this->dbname, new Command($collstats));
             $response = $cursor->toArray()[0];
         } catch(MongoDBDriverException $e) {
-            echo $e->getMessage(), "\n";
+            // echo $e->getMessage(), "\n";
         }
     }
-    //选择集合
+    /**
+     * @desc 选择集合
+     * @param collection_name 集合名
+     */
     public function selectCollection($collection_name)
     {
+        // return $this->conn->selectCollection($collection_name);
         $this->collection = $collection_name;
     }
-    //选择数据库
+    /**
+     * @desc 选择数据库
+     * @param dbname 数据库名称
+     */
     public function select($dbname='db')
     {
         $this->dbname = $dbname;
     }
-    //获取信息
+    /**
+     * @desc 获取信息
+     */
     public function get_one($collection_name='', $condition=array(), $fields=array(), $key='')
     {
 
@@ -117,20 +139,12 @@ class db_mongodb implements mongo_base
         $query = new Query($filter, $condition);
         $dbcollection = $this->dbname.".".$collection_name;
         $row = $this->conn->executeQuery($dbcollection, $query); 
-
-        $row = $row;
-
-        // $it = new \IteratorIterator($cursor);
-        // $it->rewind(); 
-        // while($doc = $it->current()) {
-        //     $row[] = $doc;
-        //     $it->next();
-        // }
-
         return $row;
 
     }
-    //插入
+    /**
+     * @desc 插入数据
+     */
     public function insert($collection_name='', $docarray=array(), $options=array())
     {
         $bulk = new BulkWrite(['ordered' => true]);

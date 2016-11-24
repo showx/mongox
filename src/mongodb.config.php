@@ -14,5 +14,9 @@ define("MONGOX_PASS","");
 //默认数据库
 define("MONGOX_DB","db");
 //站点ID 理解为集合
-define("MONGOX_ID","test");
+// define("MONGOX_ID","test");
+//是否使用固定集合
+define("MONGOX_FIXED",true);
+//固定集合的大小
+define("MONGOX_SIZE","65536");
 ?>

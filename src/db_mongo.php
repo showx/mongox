@@ -14,7 +14,9 @@ class db_mongo implements mongo_base
     {
         self::init_mongo($host,$username,$password,$dbname);
     }
-    //初始化mongo
+    /**
+     * @desc 初始化mongo
+     */
     function init_mongo($host,$username,$password,$dbname='')
     {
         try 
@@ -38,40 +40,62 @@ class db_mongo implements mongo_base
             echo 'mongo die';
         }
     }
-    //创建集合
-    function createCollection($collection_name)
+    /**
+     * @desc 创建集合
+     * @param collection_name 集合名
+     * @param size 空间大小 
+     */
+    function createCollection($collection_name,$size='')
     {
-        return $this->db->createCollection( $collection_name );
+        if(empty($size) && !empty(MONGOX_SIZE))
+        {
+            $size = MONGOX_SIZE;
+        }
+        if(!empty($size))
+        {
+            return $this->db->createCollection( $collection_name );
+        }else{
+            //创建固定集合的
+            return $this->db->createCollection( $collection_name,array('capped'=>true,'size'=>$size));
+        }
+        
     }
-    //选择集合
+    /**
+     * @desc 选择集合
+     * @param collection_name 集合名称
+     */
     function selectCollection($collection_name)
     {
         return $this->db->selectCollection( $collection_name );
     }
-    //选择数据库
+    /**
+     * @desc 选择数据库
+     * @param dbname 数据库名称
+     */
     function select($dbname)
     {
-            $this->db = $this->conn->selectDB($dbname);
+        $this->db = $this->conn->selectDB($dbname);
 	    return $this->db;
     }
-    //获取信息
-     public function get_one( $collection_name='', $condition=array(), $fields=array(), $key='' )
+    /**
+     * @desc 获取信息
+     * @param collection_name string 集合名称
+     * @param condition array 条件
+     * @param fields array 字段
+     */
+    public function get_one( $collection_name='', $condition=array(), $fields=array(), $key='' )
     {
 
         $rs = $this->db->selectCollection($collection_name)->findOne($condition, $fields);
         return empty($key) ? $rs :( isset($rs[$key]) ? $rs[$key] : false );
     }
-    //插入
+    /**
+     * @desc 插入数据
+     * @param collection_name 集合名称
+     */
     public function insert( $collection_name='', $docarray=array(), $options=array() )
     {
     	return $this->db->selectCollection($collection_name)->insert( $docarray, $options );
-    
-        /*
-	if( !isset( $this->cols[$collection_name] ) )
-        {
-            $this->cols[$collection_name] = $this->select( $collection_name );
-        }
-        return $this->cols[$collection_name]->insert( $docarray, $options );
-	*/
+
     }
 }
