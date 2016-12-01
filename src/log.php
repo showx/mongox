@@ -47,7 +47,7 @@ Class log{
     {
         $mogo = new \mongox\mongoadapter(MONGOX_HOST,MONGOX_PORT,MONGOX_USER,MONGOX_PASS);
         $select = $mogo->select(MONGOX_DB);
-        $siteid = MONGOX_ID;
+        // $siteid = MONGOX_ID;
 
         foreach(self::$logs as $log_name => $log_datas )
         {
